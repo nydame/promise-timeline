@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const SharedTimelineContext = React.createContext();
+
 class App extends Component {
   render() {
     return (
@@ -20,9 +22,33 @@ class App extends Component {
             Learn React
           </a>
         </header>
+        <SharedTimelineContext.Provider value={{x: 100, y: "hello"}}>
+          <Timeline></Timeline>
+          <NewItemForm></NewItemForm>
+        </SharedTimelineContext.Provider>
       </div>
     );
   }
+}
+
+function Timeline(props) {
+  return (<ul>Timeline component here. I will show a timeline item for every event or reminder.
+    <li>
+      <TimelineItem></TimelineItem>
+    </li>
+  </ul>);
+}
+
+class TimelineItem extends React.Component {
+  static contextType = SharedTimelineContext;
+
+  render() {
+    return (<p>This is a timeline event using {this.context.y}.</p>);
+  }
+}
+
+function NewItemForm(props) {
+  return (<div>Form component here.</div>);
 }
 
 export default App;
