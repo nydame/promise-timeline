@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import api from '../data/apiConfig';
 import { Get } from 'react-axios';
+import './Timeline.css';
 
 class Timeline extends Component {
     render() {
@@ -13,11 +14,16 @@ class Timeline extends Component {
                 } else if (res !== null) {
                     // define "now" in milliseconds
                     const now = new Date().getTime();
-                    return (<ul>
+                    let wasPast = true;
+                    return (<ul className="timeline">
                         {res.data.map((item, key) => {
                             const { date, attendable, attended, clientId, type } = item;
-                            return (<li key={key}><TimelineItem
-                                future={(parseInt(date) > now) ? true : false}
+                            let extraClass = (parseInt(date) > now)? "future" : "";
+                            if (extraClass && wasPast) {
+                                extraClass += " first";
+                                wasPast = false;
+                            }
+                            return (<li className={extraClass} key={key}><TimelineItem
                                 date={parseInt(date)}
                                 attendable={(attendable === "true") ? true : false}
                                 attended={(attended === "true") ? true : false}
@@ -34,17 +40,16 @@ class Timeline extends Component {
 }
 
 function TimelineItem(props) {
-    const extraClass = (props.future) ? " future" : "";
     switch (props.type) {
         case "court":
-            return (<section className={`timeline-item-court${extraClass}`}>
+            return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
                 <span className="timeline-icon">{props.type} icon</span>
                 <h1>Court Date</h1>
             </section>);
             break;
         case "case":
-            return (<section className={`timeline-item-case${extraClass}`}>
+            return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
                 <span className="timeline-icon">{props.type} icon</span>
                 <h1>Case Manager Appointment</h1>
