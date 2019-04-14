@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import api from './data/apiConfig';
+import {Get} from 'react-axios';
 
-const SharedTimelineContext = React.createContext();
+const SharedContext = React.createContext();
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <div className="App">
@@ -22,33 +27,85 @@ class App extends Component {
             Learn React
           </a>
         </header>
-        <SharedTimelineContext.Provider value={{x: 100, y: "hello"}}>
+        <SharedContext.Provider value={{x: 100, y: "hello"}}>
           <Timeline></Timeline>
           <NewItemForm></NewItemForm>
-        </SharedTimelineContext.Provider>
+        </SharedContext.Provider>
       </div>
     );
   }
 }
 
-function Timeline(props) {
-  return (<ul>Timeline component here. I will show a timeline item for every event or reminder.
-    <li>
-      <TimelineItem></TimelineItem>
-    </li>
-  </ul>);
-}
-
-class TimelineItem extends React.Component {
-  static contextType = SharedTimelineContext;
-
+class Timeline extends Component {
+  static constextType = SharedContext;
   render() {
-    return (<p>This is a timeline event using {this.context.y}.</p>);
+    return (
+      <Get url="/events" instance={api}>{(err, res, isLoading, makeRequest, axios) => {
+        if (err) {
+          return (<div className="error">Error: {err.message} <TryAgainLink path="/"></TryAgainLink></div>);
+        } else if (isLoading) {
+          return (<div className="loading">Just a minute&hellip;</div>);
+        } else if (res !== null) {
+          return (<ul>
+            {res.data.map((item, key) => {
+              const {date, attendable, attended, clientId, type} = item;
+              return (<li key={key}><TimelineItem 
+                date={parseInt(date)} 
+                attendable={(attendable === "true")? true : false} 
+                attended={(attended === "true")? true : false} 
+                clientId={parseInt(clientId)} 
+                type={type}></TimelineItem></li>);
+            })}
+          </ul>);
+        } else {
+          return (<div>Time line cannot be loaded at this time.</div>);
+        }
+      }}</Get>
+    );
   }
 }
 
+function TimelineItem(props) {
+  switch (props.type) {
+    case "court":
+      return (<section className="timeline-item-court">
+        <span className="timeline-date">{props.date}</span>
+        <span className="timeline-icon">{props.type} icon</span>
+        <h1>Court Date</h1>
+      </section>);
+      break;
+    case "case":
+      return (<section className="timeline-item-case">
+          <span className="timeline-date">{props.date}</span>
+          <span className="timeline-icon">{props.type} icon</span>
+          <h1>Case Manager Appointment</h1>
+        </section>);
+      break;
+    case "":
+    default:
+      break;
+  }
+  return (
+    <section>
+      <span className="date">{props.date}</span>
+    </section>
+  );
+}
+
+// class TimelineItem extends React.Component {
+//   static contextType = SharedContext;
+
+//   render() {
+//     return (<p>This is a timeline event using {this.context.theme} theme.</p>);
+//   }
+// }
+
 function NewItemForm(props) {
   return (<div>Form component here.</div>);
+}
+
+function TryAgainLink(props) {
+  return (<a className="App-link" href={`"${props.path}"`}>Try again</a>);
 }
 
 export default App;
