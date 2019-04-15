@@ -34,9 +34,11 @@ class NewItemForm extends Component {
         return (<form className="new-item-form" style={{display}} onSubmit={this.handleSubmit}>
             Use this form to add an event to the timeline
             <Divider />
-            <label for="date-picker">Choose date and time of event</label>
-            <input type="datetime-local" id="date-picker" name="date-picker" value={new Date().toLocaleDateString()} />
-            <input type="submit" />
+            <label for="date-picker">Choose date of event</label>
+            <input type="date" id="date-picker" name="date-picker" value={new Date().toLocaleDateString} />
+            <label for="time-picker">Choose time of event</label>
+            <input type="time" id="time-picker" name="time-picker" value={new Date().toLocaleTimeString} />
+            <input type="submit" value="Submit" />
         </form>);
     }
 }
