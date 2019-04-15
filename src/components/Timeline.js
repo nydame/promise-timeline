@@ -3,7 +3,7 @@ import api from '../data/apiConfig';
 import { Get } from 'react-axios';
 import './Timeline.css';
 import AlarmIcon from '@material-ui/icons/AlarmOutlined';
-import DateRangeIcon from '@material-ui/icons/DateRange';
+import DateRangeIcon from '@material-ui/icons/DateRangeOutlined';
 
 class Timeline extends Component {
     render() {
