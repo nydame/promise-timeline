@@ -35,7 +35,7 @@ class Timeline extends Component {
                             }
 
                             return (<li className={extraClass} key={key}><TimelineItem
-                                date={parseInt(date)}
+                                date={new Date(parseInt(date)).toUTCString()}
                                 attendable={(attendable === "true") ? true : false}
                                 attended={(attended === "true") ? true : false}
                                 clientId={parseInt(clientId)}
