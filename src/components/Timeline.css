@@ -42,8 +42,9 @@ section span {
     color: hsl(240, 100%, 10%);
 }
 section p {
+    background-color: hsl(240, 60%, 85%);
     border-top: 1px solid hsl(240, 10%, 80%);
     flex-grow: 3;
     min-width: 100%;
-    padding-top: 1em;
+    padding: 1em 0;
 }

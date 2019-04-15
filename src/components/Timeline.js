@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import api from '../data/apiConfig';
 import { Get } from 'react-axios';
 import './Timeline.css';
+import AlarmIcon from '@material-ui/icons/AlarmOutlined';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 
 class Timeline extends Component {
     render() {
@@ -31,7 +33,6 @@ class Timeline extends Component {
                                 associatedEvent = res.data.find(eventObj => eventObj.date === eventInfo[0] && eventObj.clientId === eventInfo[1]);
                                
                             }
-                            const associatedEventType = associatedEvent.type;
 
                             return (<li className={extraClass} key={key}><TimelineItem
                                 date={parseInt(date)}
@@ -56,14 +57,14 @@ function TimelineItem(props) {
         case "court":
             return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
-                <span className="timeline-icon">{props.type} icon</span>
+                <span className="timeline-icon"><DateRangeIcon /></span>
                 <h1>Court Date</h1>
                 </section>);
             break;
         case "case":
             return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
-                <span className="timeline-icon">{props.type} icon</span>
+                <span className="timeline-icon"><DateRangeIcon /></span>
                 <h1>Case Manager Appointment</h1>
                 </section>);
             break;
@@ -82,7 +83,7 @@ function TimelineItem(props) {
             }
             return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
-                <span className="timeline-icon">{props.type} icon</span>
+                <span className="timeline-icon"><AlarmIcon /></span>
                 <h1>Reminder Regarding Your {eventDescription}</h1>
                 <p>{props.message}</p>
             </section>);
