@@ -17,18 +17,30 @@ class Timeline extends Component {
                     let wasPast = true;
                     return (<ul className="timeline">
                         {res.data.map((item, key) => {
-                            const { date, attendable, attended, clientId, type } = item;
+                            const { date, attendable, attended, clientId, type, event, message } = item;
+                            // distinguish items in the future
                             let extraClass = (parseInt(date) > now)? "future" : "";
                             if (extraClass && wasPast) {
                                 extraClass += " first";
                                 wasPast = false;
                             }
+                            // for reminders, find associated event & client
+                            let associatedEvent = {};
+                            if (event) {
+                                const eventInfo = event.split('-');
+                                associatedEvent = res.data.find(eventObj => eventObj.date === eventInfo[0] && eventObj.clientId === eventInfo[1]);
+                               
+                            }
+                            const associatedEventType = associatedEvent.type;
+
                             return (<li className={extraClass} key={key}><TimelineItem
                                 date={parseInt(date)}
                                 attendable={(attendable === "true") ? true : false}
                                 attended={(attended === "true") ? true : false}
                                 clientId={parseInt(clientId)}
-                                type={type}></TimelineItem></li>);
+                                type={type || "reminder"}
+                                associatedEventType={associatedEvent.type}
+                                message={message}></TimelineItem></li>);
                         })}
                     </ul>);
                 } else {
@@ -46,13 +58,33 @@ function TimelineItem(props) {
                 <span className="timeline-date">{props.date}</span>
                 <span className="timeline-icon">{props.type} icon</span>
                 <h1>Court Date</h1>
-            </section>);
+                </section>);
             break;
         case "case":
             return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
                 <span className="timeline-icon">{props.type} icon</span>
                 <h1>Case Manager Appointment</h1>
+                </section>);
+            break;
+        case "reminder":
+            let eventDescription = "";
+            switch (props.associatedEventType) {
+                case "court":
+                    eventDescription += "Court Date";
+                    break;
+                case "case":
+                    eventDescription += "Case Manager Appointment";
+                    break;
+                case "":
+                default:
+                    break;
+            }
+            return (<section className={`timeline-item-${props.type}`}>
+                <span className="timeline-date">{props.date}</span>
+                <span className="timeline-icon">{props.type} icon</span>
+                <h1>Reminder Regarding Your {eventDescription}</h1>
+                <p>{props.message}</p>
             </section>);
             break;
         case "":

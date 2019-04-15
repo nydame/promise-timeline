@@ -9,6 +9,7 @@
     color: #fff;
     content: "NOW";
     display: block;
+    padding: 0.5em 0;
 }
 .timeline li,
 .future.first::before {
@@ -19,17 +20,30 @@ section {
     background-color: hsl(240, 10%, 80%);
     color: #5a5a5a;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     padding: 2em;
 }
 section h1,
 section span {
-    flex-wrap: wrap;
+    flex-grow: 1;
     margin: 0;
-    min-width: 33.33%;
     text-align: center;
+}
+section h1 {
+    max-width: 33%;
+}
+section span {
+    min-width: 100px;
+    min-width: 0.2vmin;
 }
 .future section {
     background-color: hsl(240, 60%, 80%);
     color: hsl(240, 100%, 10%);
+}
+section p {
+    border-top: 1px solid hsl(240, 10%, 80%);
+    flex-grow: 3;
+    min-width: 100%;
+    padding-top: 1em;
 }
