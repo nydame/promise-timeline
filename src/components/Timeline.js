@@ -60,14 +60,12 @@ function TimelineItem(props) {
                 <span className="timeline-icon"><DateRangeIcon /></span>
                 <h1>Court Date</h1>
                 </section>);
-            break;
         case "case":
             return (<section className={`timeline-item-${props.type}`}>
                 <span className="timeline-date">{props.date}</span>
                 <span className="timeline-icon"><DateRangeIcon /></span>
                 <h1>Case Manager Appointment</h1>
                 </section>);
-            break;
         case "reminder":
             let eventDescription = "";
             switch (props.associatedEventType) {
@@ -87,7 +85,6 @@ function TimelineItem(props) {
                 <h1>Reminder Regarding Your {eventDescription}</h1>
                 <p>{props.message}</p>
             </section>);
-            break;
         case "":
         default:
             break;
