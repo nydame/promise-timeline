@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField} from '@material-ui/core';
 import Axios from 'axios';
+import qs from 'qs';
 
 class NewItemForm extends Component {
     constructor(props) {
@@ -69,14 +70,16 @@ class NewItemForm extends Component {
                 break;
         }
 
+        const postData = {
+            date: dateInMillisecondsString,
+            clientId: clientId,
+            attendable: isAttendable,
+            attended: "false",
+            type: this.state.newTimelineItem.type
+        }
+
         if (request.length) {
-            Axios.post("http://localhost:8000" + request, {
-                date: dateInMillisecondsString, 
-                clientId: clientId, 
-                attendable: isAttendable, 
-                attended: "false", 
-                type: this.state.newTimelineItem.type
-            }).catch(
+            Axios.post("http://localhost:8000" + request, qs.stringify(postData)).catch(
                 // TODO
             );
         } 
